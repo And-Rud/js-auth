@@ -8,16 +8,32 @@ const router = express.Router()
 
 // ↙️ тут вводимо шлях (PATH) до сторінки
 router.get('/', function (req, res) {
-  res.render('index', {
+  return res.render('index', {
     name: 'index',
 
     component: [''],
 
-    title: 'Home page',
+    title: 'Index page',
 
     data: {},
   })
   // ↑↑ сюди вводимо JSON дані
+})
+//===================================
+router.get('/home', function (req, res) {
+  return res.render('home', {
+    name: 'home',
+    title: 'Home page',
+    data: {},
+  })
+})
+//===================================
+router.get('/logout', function (req, res) {
+  return res.render('logout', {
+    name: 'logout',
+    title: 'Logout page',
+    data: {},
+  })
 })
 // Підключіть файли роутів
 const auth = require('./auth')

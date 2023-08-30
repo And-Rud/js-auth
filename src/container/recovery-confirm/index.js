@@ -1,8 +1,5 @@
-import {
-  Form,
-  REG_EXP_EMAIL,
-  REG_EXP_PASSWORD,
-} from '../../script/form'
+import { Form, REG_EXP_EMAIL, REG_EXP_PASSWORD } from '../../script/form'
+import { saveSession } from '../../script/session'
 
 class RecoveryConfirmForm extends Form {
   //константа полів які маємо в формі
@@ -16,8 +13,7 @@ class RecoveryConfirmForm extends Form {
     IS_BIG: 'Дуже довге значення, приберіть зайве',
     PASSWORD:
       'Пароль повинен складатися з не меньше як 8 символів, включаючи одну цифру, малу та велику літеру',
-    PASSWORD_AGAIN:
-      'Ваш другий пароль не збігається з першим',
+    PASSWORD_AGAIN: 'Ваш другий пароль не збігається з першим',
   }
 
   //перевірка по коректному зню
@@ -34,10 +30,7 @@ class RecoveryConfirmForm extends Form {
       }
     }
     if (name === this.FIELD_NAME.PASSWORD_AGAIN) {
-      if (
-        String(value) !==
-        this.value[this.FIELD_NAME.PASSWORD]
-      ) {
+      if (String(value) !== this.value[this.FIELD_NAME.PASSWORD]) {
         console.log(this.value.password)
         return this.FIELD_ERROR.PASSWORD_AGAIN
       }
@@ -66,6 +59,8 @@ class RecoveryConfirmForm extends Form {
       const data = await res.json()
       if (res.ok) {
         this.setAlert('success', data.message)
+        saveSession(data.session)
+        location.assign('/')
       } else {
         this.setAlert('error', data.message)
       }
@@ -76,11 +71,8 @@ class RecoveryConfirmForm extends Form {
 
   convertData = () => {
     return JSON.stringify({
-      [this.FIELD_NAME.CODE]: Number(
-        this.value[this.FIELD_NAME.CODE],
-      ),
-      [this.FIELD_NAME.PASSWORD]:
-        this.value[this.FIELD_NAME.PASSWORD],
+      [this.FIELD_NAME.CODE]: Number(this.value[this.FIELD_NAME.CODE]),
+      [this.FIELD_NAME.PASSWORD]: this.value[this.FIELD_NAME.PASSWORD],
     })
   }
 }
